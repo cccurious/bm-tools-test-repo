@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function simulatePulls(P_target, typesCount, needs, initialTickets, probPercent) {
-        const runs = 5000; 
+        const runs = App.CONFIG.SIM_RUNS;
         let results = new Int32Array(runs);
         
         // Dynamic seed so results fluctuate per calculation
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             while(true) {
                 let totalDeficit = currentNeeds.reduce((a, b) => a + b, 0);
-                let availableExchanges = Math.floor(tickets / 20);
+                let availableExchanges = Math.floor(tickets / App.CONFIG.NORMAL.TICKETS_FOR_EXCHANGE);
                 
                 if (totalDeficit <= availableExchanges) {
                     break;
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
                 
-                if (pulls % 40 === 0) tickets++;
+                if (pulls % App.CONFIG.NORMAL.PULLS_FOR_TICKET === 0) tickets++;
             }
             results[i] = pulls;
         }
@@ -92,13 +92,17 @@ document.addEventListener('DOMContentLoaded', () => {
             // Yield to browser rendering before heavy calculation
             setTimeout(() => {
                 const pulls = simulatePulls(pSpecific, App.numCards, needs, initialTickets, probPercent);
-                const earnedTickets = Math.floor(pulls / 40);
+                const earnedTickets = Math.floor(pulls / App.CONFIG.NORMAL.PULLS_FOR_TICKET);
                 
-                let batches = Math.floor(pulls / 60);
-                let singles = pulls % 60;
-                let singlesCost = singles * 100;
-                if (singlesCost >= 5000) { singlesCost = 5000; }
-                const totalBM = batches * 5000 + singlesCost;
+                const batchPulls = App.CONFIG.NORMAL.PULLS_PER_BATCH;
+                const batchCost = App.CONFIG.NORMAL.BM_PER_BATCH;
+                const singleCost = App.CONFIG.NORMAL.BM_PER_SINGLE;
+                
+                let batches = Math.floor(pulls / batchPulls);
+                let singles = pulls % batchPulls;
+                let singlesTotalCost = singles * singleCost;
+                if (singlesTotalCost >= batchCost) { singlesTotalCost = batchCost; }
+                const totalBM = batches * batchCost + singlesTotalCost;
 
                 showResult(totalBM, pulls, earnedTickets);
 

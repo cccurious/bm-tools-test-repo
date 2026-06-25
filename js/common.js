@@ -1,4 +1,37 @@
 window.App = {
+    CONFIG: {
+        SIM_RUNS: 5000,
+        NORMAL: {
+            PULLS_FOR_TICKET: 40,
+            TICKETS_FOR_EXCHANGE: 20,
+            PULLS_PER_BATCH: 60,
+            BM_PER_BATCH: 5000,
+            BM_PER_SINGLE: 100
+        },
+        COLLAB: {
+            PULLS_FOR_TICKET: 50,
+            PULLS_PER_BATCH: 60,
+            BM_PER_BATCH: 5000,
+            BM_PER_SINGLE: 100,
+            HIT_RATES: {
+                CHAR_1: 0.50,
+                CHAR_2: 0.50,
+                CHAR_3_PLUS: 0.75
+            }
+        },
+        TEMPLATES: {
+            DEFAULT_TYPE: 3,
+            2: { UR_RATE: 2.0, MULTIPLIER: 28, OTHER_COUNT: 83 },
+            3: { UR_RATE: 2.0, MULTIPLIER: 28, OTHER_COUNT: 83 },
+            4: { UR_RATE: 2.0, MULTIPLIER: 21, OTHER_COUNT: 83 },
+            5: { UR_RATE: 2.0, MULTIPLIER: 21, OTHER_COUNT: 83 }
+        },
+        DEFAULTS: {
+            CURRENT_TICKETS: 0,
+            LUCK_PULLS: 60
+        }
+    },
+
     cardColors: [
         'assets/card_red.png', 
         'assets/card_blue.png', 
@@ -114,19 +147,16 @@ document.addEventListener('DOMContentLoaded', () => {
             App.numCards = type;
             App.initCardState(App.numCards);
 
-            // Update multipliers based on selection
+            // Update inputs based on selection
             const multiplierInput = document.getElementById('target-card-multiplier');
             const otherCardInput = document.getElementById('other-card-count');
+            const urRateInput = document.getElementById('total-ur-rate');
             
-            if(otherCardInput) otherCardInput.value = 83; // 常に一律83枚
-            
-            if(multiplierInput) {
-                switch(type) {
-                    case 2: multiplierInput.value = 28; break;
-                    case 3: multiplierInput.value = 28; break;
-                    case 4: multiplierInput.value = 21; break;
-                    case 5: multiplierInput.value = 21; break;
-                }
+            const tmplData = App.CONFIG.TEMPLATES[type];
+            if (tmplData) {
+                if(otherCardInput) otherCardInput.value = tmplData.OTHER_COUNT;
+                if(multiplierInput) multiplierInput.value = tmplData.MULTIPLIER;
+                if(urRateInput) urRateInput.value = tmplData.UR_RATE;
             }
         });
     });
@@ -169,6 +199,36 @@ document.addEventListener('DOMContentLoaded', () => {
             if (targetView) {
                 targetView.classList.remove('hidden');
                 targetView.classList.add('active');
+                
+                // コラボ機能のリセット
+                if (viewId === 'collab' && typeof App.resetCollabToStep1 === 'function') {
+                    App.resetCollabToStep1();
+                }
+
+                // BM予測・ガチャ運のリセット
+                if (viewId === 'bm' || viewId === 'luck') {
+                    App.numCards = App.CONFIG.TEMPLATES.DEFAULT_TYPE;
+                    App.initCardState(App.numCards);
+                    
+                    document.querySelectorAll('.tmpl-btn').forEach(btn => {
+                        btn.classList.remove('active');
+                        if (parseInt(btn.dataset.type) === App.numCards) btn.classList.add('active');
+                    });
+
+                    const currentTickets = document.getElementById('current-tickets');
+                    if(currentTickets) currentTickets.value = App.CONFIG.DEFAULTS.CURRENT_TICKETS;
+                    const luckPullsInput = document.getElementById('luck-pulls-input');
+                    if(luckPullsInput) luckPullsInput.value = App.CONFIG.DEFAULTS.LUCK_PULLS;
+
+                    // テンプレートデフォルト値の反映
+                    const tmplData = App.CONFIG.TEMPLATES[App.numCards];
+                    const totalUrRate = document.getElementById('total-ur-rate');
+                    if(totalUrRate) totalUrRate.value = tmplData.UR_RATE;
+                    const targetCardMultiplier = document.getElementById('target-card-multiplier');
+                    if(targetCardMultiplier) targetCardMultiplier.value = tmplData.MULTIPLIER;
+                    const otherCardCount = document.getElementById('other-card-count');
+                    if(otherCardCount) otherCardCount.value = tmplData.OTHER_COUNT;
+                }
                 
                 // Hide template section for collab view
                 const templateSec = document.querySelector('.template-section');

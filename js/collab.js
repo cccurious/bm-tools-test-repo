@@ -274,25 +274,27 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    if (collabBackBtn) {
-        collabBackBtn.addEventListener('click', () => {
-            collabStep2.classList.add('hidden');
-            collabStep1.classList.remove('hidden');
-            if(collabResultSec) {
-                collabResultSec.classList.remove('show');
-                collabResultSec.classList.add('hidden');
-                collabResultSec.style.display = '';
-            }
-            
-            // 選択状況とアコーディオンをリセット
-            App.collabOrigWantedVars = [];
-            App.collabState.forEach(c => {
-                c.defaultState = 'none';
-                c.wantedVars = [];
-                c.isAccordionOpen = false;
-            });
-            renderCollabCards();
+    App.resetCollabToStep1 = function() {
+        if(collabStep2) collabStep2.classList.add('hidden');
+        if(collabStep1) collabStep1.classList.remove('hidden');
+        if(collabResultSec) {
+            collabResultSec.classList.remove('show');
+            collabResultSec.classList.add('hidden');
+            collabResultSec.style.display = '';
+        }
+        
+        // 選択状況とアコーディオンをリセット
+        App.collabOrigWantedVars = [];
+        App.collabState.forEach(c => {
+            c.defaultState = 'none';
+            c.wantedVars = [];
+            c.isAccordionOpen = false;
         });
+        renderCollabCards();
+    };
+
+    if (collabBackBtn) {
+        collabBackBtn.addEventListener('click', App.resetCollabToStep1);
     }
 
     // Initialize Collab state
@@ -331,7 +333,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 if (win) break;
                 
-                pulls += 50; 
+                pulls += App.CONFIG.COLLAB.PULLS_FOR_TICKET; 
                 let collabCount = collabSettings.length;
                 
                 let collabHitRate = 0.0;
@@ -340,11 +342,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else if (totalOrig === 0) {
                     collabHitRate = 1.0;
                 } else if (collabCount === 1) {
-                    collabHitRate = 0.50;
+                    collabHitRate = App.CONFIG.COLLAB.HIT_RATES.CHAR_1;
                 } else if (collabCount === 2) {
-                    collabHitRate = 0.50;
+                    collabHitRate = App.CONFIG.COLLAB.HIT_RATES.CHAR_2;
                 } else {
-                    collabHitRate = 0.75;
+                    collabHitRate = App.CONFIG.COLLAB.HIT_RATES.CHAR_3_PLUS;
                 }
                 
                 if (Math.random() < collabHitRate) {
@@ -399,16 +401,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
             setTimeout(() => {
                 try {
-                    const resultPulls = simulateCollabPulls(5000, App.collabOrigTotal, App.collabOrigWantedVars, App.collabState);
+                    const resultPulls = simulateCollabPulls(App.CONFIG.SIM_RUNS, App.collabOrigTotal, App.collabOrigWantedVars, App.collabState);
                     
                     if (resultPulls !== undefined && !isNaN(resultPulls)) {
-                        let batches = Math.floor(resultPulls / 60);
-                        let singles = resultPulls % 60;
-                        let singlesCost = singles * 100;
-                        if (singlesCost >= 5000) { singlesCost = 5000; }
-                        const totalBM = batches * 5000 + singlesCost;
+                        const batchPulls = App.CONFIG.COLLAB.PULLS_PER_BATCH;
+                        const batchCost = App.CONFIG.COLLAB.BM_PER_BATCH;
+                        const singleCost = App.CONFIG.COLLAB.BM_PER_SINGLE;
                         
-                        const earnedTickets = Math.floor(resultPulls / 50);
+                        let batches = Math.floor(resultPulls / batchPulls);
+                        let singles = resultPulls % batchPulls;
+                        let singlesTotalCost = singles * singleCost;
+                        if (singlesTotalCost >= batchCost) { singlesTotalCost = batchCost; }
+                        const totalBM = batches * batchCost + singlesTotalCost;
+                        
+                        const earnedTickets = Math.floor(resultPulls / App.CONFIG.COLLAB.PULLS_FOR_TICKET);
 
                         collabResultBm.innerText = totalBM.toLocaleString() + ' BM';
                         collabResultPulls.innerText = `合計 ${resultPulls.toLocaleString()}連（コラボチケット ${earnedTickets.toLocaleString()}枚分）`;

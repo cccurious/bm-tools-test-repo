@@ -43,9 +43,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             setTimeout(() => {
                 const currentTickets = parseInt(document.getElementById('current-tickets').value) || 0;
-                const earnedTickets = Math.floor(pastPulls / 40);
+                const earnedTickets = Math.floor(pastPulls / App.CONFIG.NORMAL.PULLS_FOR_TICKET);
                 const spentTickets = Math.max(0, earnedTickets - currentTickets);
-                const exchangedCards = Math.floor(spentTickets / 20);
+                const exchangedCards = Math.floor(spentTickets / App.CONFIG.NORMAL.TICKETS_FOR_EXCHANGE);
                 
                 let pureGachaHits = Math.max(0, totalAcquired - exchangedCards);
 
