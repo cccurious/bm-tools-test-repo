@@ -451,7 +451,7 @@ input:disabled + .toggle-slider:before { background-color: #cbd5e0; box-shadow: 
     border: 1px solid var(--border-color);
     border-radius: 8px;
     font-weight: bold;
-    font-size: 0.95rem;
+    font-size: 0.85rem;
     color: var(--text-color);
     cursor: pointer;
     text-align: center;
