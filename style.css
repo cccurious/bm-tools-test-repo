@@ -397,9 +397,12 @@ input:disabled + .toggle-slider:before { background-color: #cbd5e0; box-shadow: 
     border: 2px solid var(--border-color);
     border-radius: 8px;
     font-weight: bold;
+    font-size: 1rem;
     color: var(--text-color);
     transition: all 0.2s;
     cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
 }
 .collab-tmpl-btn.active {
     background: var(--dark-border);
@@ -448,10 +451,13 @@ input:disabled + .toggle-slider:before { background-color: #cbd5e0; box-shadow: 
     border: 1px solid var(--border-color);
     border-radius: 8px;
     font-weight: bold;
+    font-size: 0.95rem;
     color: var(--text-color);
     cursor: pointer;
     text-align: center;
     transition: all 0.2s;
+    appearance: none;
+    -webkit-appearance: none;
 }
 .collab-accordion-toggle.open {
     border-bottom-left-radius: 0;

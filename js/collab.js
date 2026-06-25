@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="collab-list-item">
                             <span class="collab-list-label" style="${char.defaultState === 'owned' ? 'color: #a0aec0;' : ''}">オリジナルコスチューム</span>
                             <div class="collab-list-actions" style="display: flex; align-items: center; gap: 8px;">
-                                <span style="font-size: 0.8rem; font-weight: bold; color: ${char.defaultState === 'wanted' ? 'var(--primary-color)' : 'var(--subdued-text)'}; ${char.defaultState === 'owned' ? 'color: #cbd5e0;' : ''}">${char.defaultState === 'wanted' ? '狙う' : '狙わない'}</span>
+                                <span style="font-size: 0.8rem; font-weight: bold; white-space: nowrap; flex-shrink: 0; color: ${char.defaultState === 'wanted' ? 'var(--primary-color)' : 'var(--subdued-text)'}; ${char.defaultState === 'owned' ? 'color: #cbd5e0;' : ''}">${char.defaultState === 'wanted' ? '狙う' : '狙わない'}</span>
                                 <label class="toggle-switch">
                                     <input type="checkbox" class="collab-toggle wanted" ${char.defaultState === 'wanted' ? 'checked' : ''} ${char.defaultState === 'owned' ? 'disabled' : ''}>
                                     <span class="toggle-slider"></span>
@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <div class="collab-var-row" style="padding: 12px 12px 20px; margin: 0 0 12px 0; border-bottom: 2px dotted var(--border-color); display: flex; justify-content: space-between; align-items: center;">
                                     <span style="font-size: 0.85rem; color: var(--text-color);">オリジナルコスチュームを所持していますか？</span>
                                     <div style="display: flex; align-items: center; gap: 8px;">
-                                        <span style="font-size: 0.8rem; font-weight: bold; color: ${char.defaultState === 'owned' ? 'var(--primary-color)' : 'var(--subdued-text)'};">${char.defaultState === 'owned' ? 'はい' : 'いいえ'}</span>
+                                        <span style="font-size: 0.8rem; font-weight: bold; white-space: nowrap; flex-shrink: 0; color: ${char.defaultState === 'owned' ? 'var(--primary-color)' : 'var(--subdued-text)'};">${char.defaultState === 'owned' ? 'はい' : 'いいえ'}</span>
                                         <label class="toggle-switch">
                                             <input type="checkbox" class="collab-toggle owned" ${char.defaultState === 'owned' ? 'checked' : ''}>
                                             <span class="toggle-slider"></span>
@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 vItem.innerHTML = `
                     <span class="collab-list-label">バリエーション ${v}</span>
                     <div class="collab-list-actions" style="display: flex; align-items: center; gap: 8px;">
-                        <span style="font-size: 0.8rem; font-weight: bold; color: ${isWanted ? 'var(--primary-color)' : 'var(--subdued-text)'};">${isWanted ? '狙う' : '狙わない'}</span>
+                        <span style="font-size: 0.8rem; font-weight: bold; white-space: nowrap; flex-shrink: 0; color: ${isWanted ? 'var(--primary-color)' : 'var(--subdued-text)'};">${isWanted ? '狙う' : '狙わない'}</span>
                         <label class="toggle-switch">
                             <input type="checkbox" class="collab-check-toggle" data-v="${v}" ${isWanted ? 'checked' : ''}>
                             <span class="toggle-slider"></span>
@@ -206,7 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 vItem.innerHTML = `
                     <span class="collab-list-label">コラボコス ${v}</span>
                     <div class="collab-list-actions" style="display: flex; align-items: center; gap: 8px;">
-                        <span style="font-size: 0.8rem; font-weight: bold; color: ${isWanted ? 'var(--primary-color)' : 'var(--subdued-text)'};">${isWanted ? '狙う' : '狙わない'}</span>
+                        <span style="font-size: 0.8rem; font-weight: bold; white-space: nowrap; flex-shrink: 0; color: ${isWanted ? 'var(--primary-color)' : 'var(--subdued-text)'};">${isWanted ? '狙う' : '狙わない'}</span>
                         <label class="toggle-switch">
                             <input type="checkbox" class="collab-orig-toggle" data-v="${v}" ${isWanted ? 'checked' : ''}>
                             <span class="toggle-slider"></span>
