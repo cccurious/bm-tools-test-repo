@@ -84,8 +84,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="collab-accordion-inner">
                             <div class="collab-accordion-content" style="padding: 0;">
                                 <div class="collab-var-row" style="padding: 12px 12px 20px; margin: 0 0 12px 0; border-bottom: 2px dotted var(--border-color); display: flex; justify-content: space-between; align-items: center;">
-                                    <span style="font-size: 0.85rem; color: var(--text-color);">オリジナルコスチュームを所持していますか？</span>
-                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span style="font-size: 0.85rem; color: var(--text-color); flex: 1; line-height: 1.4; padding-right: 12px;">オリジナルコスチュームを所持していますか？</span>
+                                    <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
                                         <span style="font-size: 0.8rem; font-weight: bold; white-space: nowrap; flex-shrink: 0; color: ${char.defaultState === 'owned' ? 'var(--primary-color)' : 'var(--subdued-text)'};">${char.defaultState === 'owned' ? 'はい' : 'いいえ'}</span>
                                         <label class="toggle-switch">
                                             <input type="checkbox" class="collab-toggle owned" ${char.defaultState === 'owned' ? 'checked' : ''}>
